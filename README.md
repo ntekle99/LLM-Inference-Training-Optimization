@@ -19,21 +19,6 @@ This project merges my interests in **ML systems optimization** (Adobe, Apple AI
 | **Gradient Accumulation** | Simulated large-batch updates under memory limits | Stable training on < 16 GB VRAM |
 | **Checkpointing** | Applied selective activation checkpointing for transformer blocks | Freed ~40 % activation memory |
 
-## ⚙️ System Architecture
-efficient-llm/
-├── model/
-│ ├── llama.py # Transformer core
-│ ├── lora.py # Custom LoRA linear modules
-│
-├── scripts/
-│ ├── inference.py # KV cache experiments
-│ ├── finetuning.py # Instruction tuning workflow
-│ ├── benchmark_inference.py# Memory/runtime profiling
-│
-├── data/
-│ └── alpaca_subset.json # 200-sample instruction dataset
-└── README.md
-
 ## ⚡ Inference Benchmarks
 
 | **Batch** | **Cache** | **Peak Memory (GB)** | **Runtime (s)** | **Δ Runtime** |
