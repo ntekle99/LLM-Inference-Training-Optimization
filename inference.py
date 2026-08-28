@@ -39,8 +39,8 @@ def inference():
     ]
 
     model.eval()
-    # results = model.generate(tokenizer, prompts, max_gen_len=64, temperature=0.6, top_p=0.9, kv_caching=True, device=device)
-    results = model.generate(tokenizer, prompts, max_gen_len=64, temperature=0.6, top_p=0.9, device=device)
+    results = model.generate(tokenizer, prompts, max_gen_len=64, temperature=0.6,
+                             top_p=0.9, kv_caching=True, device=device)
     for prompt, result in zip(prompts, results):
         print(prompt)
         print(f"> {result['generation']}")

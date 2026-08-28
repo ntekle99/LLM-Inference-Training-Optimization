@@ -1,3 +1,4 @@
 torch
 tiktoken
-blobfile
+blobfilepytest
+ninja

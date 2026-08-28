@@ -27,11 +27,6 @@ def get_model_memory_mb(model):
     param_size = 2  # Assuming float16 (2 bytes)
     return num_params * param_size / (1024 ** 2)
 
-def bunc(batch_size,input_len,output_len,kv_caching):
-    torch.manual_seed(1)
-    for i in range(5):
-        print(i+i*6)
-        
 def benchmark_inference(batch_size, input_len, output_len, kv_caching):
     torch.manual_seed(1)
 
@@ -54,20 +49,17 @@ def benchmark_inference(batch_size, input_len, output_len, kv_caching):
     model.to("cuda")
     model.eval()
 
+    torch.cuda.reset_peak_memory_stats()
+
     base_prompt = "Once upon a time in a galaxy far away"
     prompts = generate_batch_prompts(base_prompt, input_len, batch_size, tokenizer)
 
-    start_time = time.time()
-
-    # results = model.generate(
-    #     tokenizer,
-    #     prompts,
-    #     max_gen_len=output_len,
-    #     temperature=0.6,
-    #     top_p=0.9,
-    #     kv_caching=kv_caching,
-    #     device="cuda",
-    # )
+    # CUDA kernels are asynchronous: without a sync, time.time() records when
+    # the work was *queued*, not when it finished. Every number in the README
+    # predating this line was measured that way and is not trustworthy until
+    # re-run through this path.
+    torch.cuda.synchronize()
+    start_time = time.perf_counter()
 
     results = model.generate(
         tokenizer,
@@ -75,10 +67,12 @@ def benchmark_inference(batch_size, input_len, output_len, kv_caching):
         max_gen_len=output_len,
         temperature=0.6,
         top_p=0.9,
+        kv_caching=kv_caching,
         device="cuda",
     )
 
-    elapsed = time.time() - start_time
+    torch.cuda.synchronize()
+    elapsed = time.perf_counter() - start_time
 
     print(f"\nBatch size: {batch_size}")
     print(f"Input length: {input_len} tokens")
