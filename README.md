@@ -1,4 +1,4 @@
-# efficient llm inference + fine-tuning
+# Efficient llm inference + fine-tuning
 
 i wanted to see how far i could push a 1B-parameter model on one GPU without just throwing more hardware at it.
 
