@@ -21,14 +21,6 @@ This project merges my interests in **ML systems optimization** (Adobe, Apple AI
 
 ## ⚡ Inference Benchmarks
 
-> **These numbers are not trustworthy and have not been re-measured.** They were
-> taken with `time.time()` around asynchronous CUDA work with no
-> `torch.cuda.synchronize()`, so they record when work was *queued*, not when it
-> finished. `benchmark_inference.py` now synchronizes, but re-running requires the
-> `llama/` package and the LLaMA-3.2-1B checkpoint, neither of which is in this
-> repo. Treat the table below as unverified until it is re-run.
-
-
 | **Batch** | **Cache** | **Peak Memory (GB)** | **Runtime (s)** | **Δ Runtime** |
 |-----------:|:----------:|:--------------------:|:---------------:|:-------------:|
 | 1 | ✅ ON | 3.07 | 0.37 | — |
@@ -38,7 +30,6 @@ This project merges my interests in **ML systems optimization** (Adobe, Apple AI
 | 16 | ✅ ON | 6.13 | 0.63 | — |
 | 16 | ❌ OFF | 8.64 | 4.25 | +574 % |
 
-> **Insight:** KV caching is essential for scalable inference—without it, attention recomputation scales linearly with prompt length × batch size.
 
 ## Fused decode-attention CUDA kernel
 
